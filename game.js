@@ -9,18 +9,27 @@ window.addEventListener('resize', setCanvasSize);
 let canvasSize;
 let elementSize;
 
-  function startGame() { 
-    console.log(window.innerHeight);   
-
-    console.log(window.innerWidth);    
+  function startGame() {   
     
     game.font = elementSize + 'px Verdana';
     game.textAlign = 'end';
 
-    for (let i = 1; i <= 10; i++) {
-        game.fillText(emojis['X'], elementSize * i, elementSize); 
-    }
-
+    const map = maps[0];
+    
+    const rowMap = map.trim().split('\n');
+     //creating an array of trimmed strings and separated every linegap
+    
+    const mapRowCols = rowMap.map( row => row.trim().split('')); 
+    //elimininating the first whitespace on each element of the array
+   
+    mapRowCols.forEach( (row, rowI) => {
+        row.forEach( (col, colI) => {
+            const emoji = emojis[col];
+            const posX = elementSize * (colI + 1);
+            const posY = elementSize * (rowI + 1);
+            game.fillText(emoji, posX, posY);
+        })
+    }); //rowI and colI are the indexes of each element iterated 
  }
 
  function setCanvasSize() {
@@ -84,6 +93,22 @@ let elementSize;
 //     for (let i = 1; i <= 10; i++) {
 //         game.fillText(emojis['X'], elementSize * i, elementSize); 
 //         //we set the size of each element and multiply it by the iterator, repeating the element as many times we can in the X axis (X in this case)
-//     }
+//     
+    //challenge to fill the entire canvas with 2 cycles with a single emoji
+    // let newSize; 
+    // for (let i = 1; i <= 10; i++) {
+    //     game.fillText(emojis['X'], elementSize * i, elementSize);
+    //     newSize = elementSize * i
+    //     for (let i = 1; i <= 10; i++){
+    //         game.fillText(emojis['X'], newSize, elementSize * i)
+    //     }
+    // } // my solution
+//}
+
+    // for (let row = 1; row <= 10; row++) {
+    //     for (let col = 1; col <= 10; col++) {
+    //         game.fillText(emojis[mapRowCols[row - 1][col - 1]], elementSize * col, elementSize * row) //row-1 or col-1 = desired element inside the array of arrays
+    //     }
+    // } //teacher's solution to the challenge
 
 //  }
