@@ -1,38 +1,27 @@
 const canvas = document.querySelector('#game');
 const game = canvas.getContext('2d');
 
+//buttons to move the player
+const upButton = document.querySelector('#up');
+const downButton = document.querySelector('#down');
+const rightButton = document.querySelector('#right');
+const leftButton = document.querySelector('#left');
+
+let elementSize;
+let canvasSize;
+
+const playerPos = {
+    x: undefined,
+    y: undefined,
+}
+
+let indicator = true; 
+//setting this variable with this value lets us use it later on as a second validator
 
 window.addEventListener('load', setCanvasSize);
- 
 window.addEventListener('resize', setCanvasSize); 
 
-let canvasSize;
-let elementSize;
-
-  function startGame() {   
-    
-    game.font = elementSize + 'px Verdana';
-    game.textAlign = 'end';
-
-    const map = maps[0];
-    
-    const rowMap = map.trim().split('\n');
-     //creating an array of trimmed strings and separated every linegap
-    
-    const mapRowCols = rowMap.map( row => row.trim().split('')); 
-    //elimininating the first whitespace on each element of the array
-   
-    mapRowCols.forEach( (row, rowI) => {
-        row.forEach( (col, colI) => {
-            const emoji = emojis[col];
-            const posX = elementSize * (colI + 1);
-            const posY = elementSize * (rowI + 1);
-            game.fillText(emoji, posX, posY);
-        })
-    }); //rowI and colI are the indexes of each element iterated 
- }
-
- function setCanvasSize() {
+function setCanvasSize() {
     if (window.innerHeight > window.innerWidth) {
         canvasSize = window.innerWidth * 0.70; 
     } else {
@@ -48,8 +37,97 @@ let elementSize;
     startGame();
 }
 
+function startGame() {   
 
+    game.font = elementSize + 'px Verdana';
+    game.textAlign = 'end';
 
+    const map = maps[0];
+
+    const rowMap = map.trim().split('\n');
+        //creating an array of trimmed strings and separated every linegap
+
+    const mapRowCols = rowMap.map( row => row.trim().split('')); 
+    //elimininating the first whitespace on each element of the array
+
+    mapRowCols.forEach( (row, rowI) => {
+        row.forEach( (col, colI) => {
+            const emoji = emojis[col];
+            const posX = elementSize * (colI + 1);
+            const posY = elementSize * (rowI + 1);
+           
+
+            if (col == 'O' && indicator == true) {
+                playerPos.x = posX;
+                playerPos.y = posY;
+                indicator = false;
+                //indicator's value gets changed to make the render of the player inaccesible in the future
+            }
+            game.fillText(emoji, posX, posY);
+        })
+    }); //rowI and colI are the indexes of each element iterated 
+    movePlayer(); //we call the function to move the player, but is going to appear each time we load the window
+
+    if ((playerPos.x - elementSize) < 0){
+        buttonRIGHT();
+    } else if (playerPos.x > canvasSize + 1) {
+        buttonLEFT();
+    } else if (playerPos.y > (canvasSize + 1)) {
+        buttonUP();
+    } else if ((playerPos.y - elementSize) < 0) {
+        buttonDOWN();
+    }
+}
+
+function movePlayer() {
+    game.fillText(emojis['PLAYER'], playerPos.x, playerPos.y);
+}
+
+function clearGame() {
+    game.clearRect(0, 0, canvasSize, canvasSize); 
+    //using this function to render the game each time the player moves
+}
+
+window.addEventListener('keyup', keyMove);
+
+upButton.addEventListener('click', buttonUP);
+downButton.addEventListener('click', buttonDOWN);
+rightButton.addEventListener('click', buttonRIGHT);
+leftButton.addEventListener('click', buttonLEFT);
+
+function keyMove(event) {
+    if (event.key == 'ArrowUp') buttonUP(); 
+    else if(event.key == 'ArrowDown') buttonDOWN();
+    else if(event.key == 'ArrowRight') buttonRIGHT();
+    else if(event.key == 'ArrowLeft') buttonLEFT();
+    //deleting curly braces makes the execution to one sentence until the first ";" appears
+}
+
+function buttonUP() {
+    clearGame();
+    playerPos.y -= elementSize;
+    startGame();
+    movePlayer();
+    //at each move we clear the game, change the position of the player, render the game without the player and then make the player appear with the new position
+}
+function buttonDOWN() {
+    clearGame();
+    playerPos.y += elementSize;
+    startGame();
+    movePlayer();
+}
+function buttonRIGHT() {
+    clearGame();
+    playerPos.x += elementSize;
+    startGame();
+    movePlayer();
+}
+function buttonLEFT() {
+    clearGame();
+    playerPos.x -= elementSize;
+    startGame();
+    movePlayer();
+}
 // DOCUMENTATION
 
 // const game = canvas.getContext('2d');
