@@ -15,41 +15,63 @@ const playerPos = {
     y: undefined,
 }
 
+const giftPos = {
+    x: undefined,
+    y: undefined,
+}
+
+let bombsPos = [];
+
+let bombFlag = true;
 let indicator = true; 
 //setting this variable with this value lets us use it later on as a second validator
+
+let level = 0;
+let lives = 3;
+//setting lives will help us to reload the game when there're no more
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize); 
 
 function setCanvasSize() {
     if (window.innerHeight > window.innerWidth) {
-        canvasSize = window.innerWidth * 0.70; 
+        canvasSize = Math.round(window.innerWidth * 0.70); 
     } else {
-        canvasSize = window.innerHeight * 0.70;
+        canvasSize = Math.round(window.innerHeight * 0.70);
     }  
      
     canvas.setAttribute('width', canvasSize);
     canvas.setAttribute('height', canvasSize); 
     
 
-    elementSize = canvasSize / 10; 
+    elementSize = Math.ceil(canvasSize / 10); 
     
     startGame();
 }
 
 function startGame() {   
 
+    let map;
     game.font = elementSize + 'px Verdana';
     game.textAlign = 'end';
 
-    const map = maps[0];
+    map = maps[level];
+
+    if (!map) {
+        youWon();
+        return;
+    }
+
 
     const rowMap = map.trim().split('\n');
         //creating an array of trimmed strings and separated every linegap
 
     const mapRowCols = rowMap.map( row => row.trim().split('')); 
     //elimininating the first whitespace on each element of the array
-
+    
+    bombsPos = [];
+    
+    game.clearRect(0,0, canvasSize, canvasSize);
     mapRowCols.forEach( (row, rowI) => {
         row.forEach( (col, colI) => {
             const emoji = emojis[col];
@@ -63,24 +85,80 @@ function startGame() {
                 indicator = false;
                 //indicator's value gets changed to make the render of the player inaccesible in the future
             }
+
+            if (col == 'I') {
+                giftPos.x = posX;
+                giftPos.y = posY;
+                //this way we set the gift positions inside the game
+            }
+            if (col == 'X') {
+                bombsPos.push({
+                    x: posX,
+                    y: posY,
+                });
+            }
             game.fillText(emoji, posX, posY);
         })
     }); //rowI and colI are the indexes of each element iterated 
     movePlayer(); //we call the function to move the player, but is going to appear each time we load the window
+    bombFlag = false;
 
     if ((playerPos.x - elementSize) < 0){
         buttonRIGHT();
-    } else if (playerPos.x > canvasSize + 1) {
+    } else if (playerPos.x > canvasSize + elementSize) {
         buttonLEFT();
-    } else if (playerPos.y > (canvasSize + 1)) {
+    } else if (playerPos.y > canvasSize + elementSize) {
         buttonUP();
     } else if ((playerPos.y - elementSize) < 0) {
         buttonDOWN();
     }
+    //this part is for not escaping the map
 }
 
 function movePlayer() {
     game.fillText(emojis['PLAYER'], playerPos.x, playerPos.y);
+
+    const bombCollision = bombsPos.find( bomb => {
+        const bombPosX = bomb.x.toFixed(3) == playerPos.x.toFixed(3);
+        const bombPosY = bomb.y.toFixed(3) == playerPos.y. toFixed(3); 
+        //this two values return booleans
+        return bombPosX && bombPosY;
+        //using return at the end with "&&" operator will help us to have as a value the coincidential positions
+    })
+
+    if (playerPos.x == giftPos.x && playerPos.y == giftPos.y){
+        gameWin();
+    } else if (bombCollision) {
+        gameLose();
+        console.log(bombCollision);
+    }    
+}
+
+function gameWin() {
+    level++;
+    console.log('new game')
+    startGame();
+}
+function gameLose() {
+    lives--;
+    playerPos.x = undefined;
+    playerPos.y = undefined;
+    indicator = true;
+    if (lives <= 0) {
+        level = 0;
+        lives = 3;
+        startGame();
+    } else {
+    // game.fillText(emojis['BOMB_COLLISION'], playerPos.x, playerPos.y);
+    console.log(lives);
+    startGame();
+    }
+}
+
+function gameOver(){}; //this function will be triggered when we lose all of our lives
+
+function youWon() {
+    console.log('You won the game')
 }
 
 function clearGame() {
