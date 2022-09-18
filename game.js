@@ -7,8 +7,16 @@ const downButton = document.querySelector('#down');
 const rightButton = document.querySelector('#right');
 const leftButton = document.querySelector('#left');
 
+//info about the game
+const heartsSpan = document.querySelector('#lives');
+const timeSpan = document.querySelector('#time');
+const recordSpan = document.querySelector('#record_Time');
+const pResult = document.querySelector('#pResult');
+
+
 let elementSize;
 let canvasSize;
+//variables to measure each element and the complete size of the map
 
 const playerPos = {
     x: undefined,
@@ -25,6 +33,11 @@ let bombsPos = [];
 let bombFlag = true;
 let indicator = true; 
 //setting this variable with this value lets us use it later on as a second validator
+
+
+let playerTime;
+let timeStart;
+//these are the variables to know how much time has passed and player time for the record
 
 let level = 0;
 let lives = 3;
@@ -62,6 +75,13 @@ function startGame() {
         return;
     }
 
+    if (!timeStart) {
+        timeStart = Date.now() //this method will give us the time at this moment;
+        timeInterval = setInterval( showTime, 100) 
+        //every 100 miliseconds the function showTime() is triggered
+        showRecord();
+    }
+
 
     const rowMap = map.trim().split('\n');
         //creating an array of trimmed strings and separated every linegap
@@ -69,7 +89,11 @@ function startGame() {
     const mapRowCols = rowMap.map( row => row.trim().split('')); 
     //elimininating the first whitespace on each element of the array
     
+    showLives();
+    //to show lives at each map reload
+
     bombsPos = [];
+    //reseting this array avoids rewriting the same positions of every bomb
     
     game.clearRect(0,0, canvasSize, canvasSize);
     mapRowCols.forEach( (row, rowI) => {
@@ -130,13 +154,11 @@ function movePlayer() {
         gameWin();
     } else if (bombCollision) {
         gameLose();
-        console.log(bombCollision);
     }    
 }
 
 function gameWin() {
     level++;
-    console.log('new game')
     startGame();
 }
 function gameLose() {
@@ -147,18 +169,51 @@ function gameLose() {
     if (lives <= 0) {
         level = 0;
         lives = 3;
+        timeStart = undefined;
         startGame();
     } else {
     // game.fillText(emojis['BOMB_COLLISION'], playerPos.x, playerPos.y);
-    console.log(lives);
     startGame();
     }
 }
 
+function showTime() {
+    timeSpan.innerHTML = Date.now() - timeStart;
+}
+
 function gameOver(){}; //this function will be triggered when we lose all of our lives
 
-function youWon() {
-    console.log('You won the game')
+function showLives() {
+    const heartsArray = Array(lives).fill(emojis['HEART']); 
+    //this is a superprototype that will have the lives elements "[1, 2, 3]" but filled with the values that are inside emojis['HEART']
+
+    const heartsArrayNoCommas = heartsArray.join(' ');
+
+    heartsSpan.innerHTML = heartsArrayNoCommas;
+}
+
+function showRecord() {
+    recordSpan.innerHTML = localStorage.getItem('record_time');
+}
+
+
+function youWonAndRecordSet() {
+    clearInterval(timeInterval); 
+    //the time interval is stopped and we see how much time we've played
+    const newRecord = localStorage.getItem('record_time');
+    const playerTime = Date.now() - timeStart;
+
+    if (newRecord) {
+        if (newRecord >= playerTime) {
+            localStorage.setItem('record_time', playerTime);
+            pResult.innerHTML = 'Congrats! new record';
+        } else {
+            pResult.innerText = 'Failed to beat the last record, try again!';
+        }
+    } else {
+        localStorage.setItem('record_time', playerTime);
+        pResult.innerText = 'First time? Nice try '
+    }
 }
 
 function clearGame() {

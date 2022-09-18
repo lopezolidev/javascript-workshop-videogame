@@ -1,7 +1,7 @@
 //this is where the maps array will be formed, with emojis as pieces of the map
 // we will change this emojis later on
 
-const emojis={'-':' ','O':'🚪','X':'💣','I':'🎁','PLAYER':'💀','BOMB_COLLISION':'🔥','GAME_OVER':'👎','WIN':'🏆',};
+const emojis={'-':' ','O':'🚪','X':'💣','I':'🎁','PLAYER':'💀','BOMB_COLLISION':'🔥','GAME_OVER':'👎','WIN':'🏆','HEART':'❤️'};
 
 const maps=[];
 
