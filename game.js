@@ -1,3 +1,4 @@
+//setting canvas size and 2d context
 const canvas = document.querySelector('#game');
 const game = canvas.getContext('2d');
 
@@ -221,7 +222,7 @@ function clearGame() {
     //using this function to render the game each time the player moves
 }
 
-window.addEventListener('keyup', keyMove);
+window.addEventListener('keydown', keyMove);
 
 upButton.addEventListener('click', buttonUP);
 downButton.addEventListener('click', buttonDOWN);
@@ -261,6 +262,15 @@ function buttonLEFT() {
     startGame();
     movePlayer();
 }
+
+//TO DO:
+// ¶ winning screen with prize
+// ¶ losing screen with skeleton
+// ¶ restart function and button
+// ¶ levels+
+
+
+
 // DOCUMENTATION
 
 // const game = canvas.getContext('2d');
