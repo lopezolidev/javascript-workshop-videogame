@@ -32,7 +32,6 @@ const giftPos = {
 let bombsPos = [];
 
 let bombFlag = true;
-let indicator = true; 
 //setting this variable with this value lets us use it later on as a second validator
 
 
@@ -60,6 +59,10 @@ function setCanvasSize() {
 
     elementSize = Math.ceil(canvasSize / 10); 
     
+    playerPos.x = undefined;
+    playerPos.y = undefined;
+    //we reload the player position on each restart of the game
+
     startGame();
 }
 
@@ -97,6 +100,8 @@ function startGame() {
     //reseting this array avoids rewriting the same positions of every bomb
     
     game.clearRect(0,0, canvasSize, canvasSize);
+
+
     mapRowCols.forEach( (row, rowI) => {
         row.forEach( (col, colI) => {
             const emoji = emojis[col];
@@ -104,11 +109,11 @@ function startGame() {
             const posY = elementSize * (rowI + 1);
            
 
-            if (col == 'O' && indicator == true) {
+            if (col == 'O') {
+                if(!playerPos.x && !playerPos.y){
                 playerPos.x = posX;
                 playerPos.y = posY;
-                indicator = false;
-                //indicator's value gets changed to make the render of the player inaccesible in the future
+                }
             }
 
             if (col == 'I') {
@@ -144,8 +149,8 @@ function movePlayer() {
     game.fillText(emojis['PLAYER'], playerPos.x, playerPos.y);
 
     const bombCollision = bombsPos.find( bomb => {
-        const bombPosX = bomb.x.toFixed(3) == playerPos.x.toFixed(3);
-        const bombPosY = bomb.y.toFixed(3) == playerPos.y. toFixed(3); 
+        const bombPosX = bomb.x.toFixed(0) == playerPos.x.toFixed(0);
+        const bombPosY = bomb.y.toFixed(0) == playerPos.y.toFixed(0); 
         //this two values return booleans
         return bombPosX && bombPosY;
         //using return at the end with "&&" operator will help us to have as a value the coincidential positions
