@@ -48,9 +48,9 @@ window.addEventListener('resize', setCanvasSize);
 
 function setCanvasSize() {
     if (window.innerHeight > window.innerWidth) {
-        canvasSize = Math.round(window.innerWidth * 0.70); 
+        canvasSize = Math.round(window.innerWidth * 0.7); 
     } else {
-        canvasSize = Math.round(window.innerHeight * 0.70);
+        canvasSize = Math.round(window.innerHeight * 0.7);
     }  
      
     canvas.setAttribute('width', canvasSize);
@@ -69,7 +69,7 @@ function setCanvasSize() {
 function startGame() {   
 
     let map;
-    game.font = elementSize + 'px Verdana';
+    game.font = elementSize * 0.8 + 'px Verdana';
     game.textAlign = 'end';
 
     map = maps[level];
