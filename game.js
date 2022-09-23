@@ -187,7 +187,19 @@ function showTime() {
     timeSpan.innerHTML = Date.now() - timeStart;
 }
 
-function gameOver(){}; //this function will be triggered when we lose all of our lives
+function restart(){
+    level = 0;
+    lives = 3;
+    localStorage
+}; //this function will be triggered when we lose all of our lives
+
+function endOfLives() {
+    // here has to go the animation and transformation of all the bombs into enemies
+}
+
+function finishedGame() {
+    //canvas animation to show stars and a modal is shown to restart the game and congrat the player
+}
 
 function showLives() {
     const heartsArray = Array(lives).fill(emojis['HEART']); 
@@ -271,7 +283,7 @@ function buttonLEFT() {
 //TO DO:
 // ¶ winning screen with prize
 // ¶ losing screen with skeleton
-// ¶ restart function and button
+// ¶ restart function and button (setTimeout function)
 // ¶ levels+
 
 
