@@ -14,6 +14,8 @@ const timeSpan = document.querySelector('#time');
 const recordSpan = document.querySelector('#record_Time');
 const pResult = document.querySelector('#pResult');
 
+//restart button
+const restartBttn = document.querySelector('#restartBttn');
 
 let elementSize;
 let canvasSize;
@@ -29,12 +31,17 @@ const giftPos = {
     y: undefined,
 }
 
+const firePos = {
+    x: undefined,
+    y: undefined,
+}
+
 let bombsPos = [];
 
 let bombFlag = true;
 //setting this variable with this value lets us use it later on as a second validator
 
-
+let collisionInterval;
 let playerTime;
 let timeStart;
 //these are the variables to know how much time has passed and player time for the record
@@ -45,6 +52,8 @@ let lives = 3;
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize); 
+restartBttn.addEventListener('click', restart);
+
 
 function setCanvasSize() {
     if (window.innerHeight > window.innerWidth) {
@@ -74,8 +83,9 @@ function startGame() {
 
     map = maps[level];
 
+
     if (!map) {
-        youWon();
+        youWonAndRecordSet();
         return;
     }
 
@@ -159,7 +169,8 @@ function movePlayer() {
     if (playerPos.x == giftPos.x && playerPos.y == giftPos.y){
         gameWin();
     } else if (bombCollision) {
-        gameLose();
+        showCollision();
+        setTimeout(gameLose, 1000);
     }    
 }
 
@@ -188,17 +199,18 @@ function showTime() {
 }
 
 function restart(){
-    level = 0;
-    lives = 3;
-    localStorage
+location.reload();
 }; //this function will be triggered when we lose all of our lives
 
-function endOfLives() {
-    // here has to go the animation and transformation of all the bombs into enemies
+function showCollision(){
+    firePos.x = playerPos.x;
+    firePos.y = playerPos.y;
+    console.log(firePos.x, firePos.y);
+    fireExp();
 }
 
-function finishedGame() {
-    //canvas animation to show stars and a modal is shown to restart the game and congrat the player
+function fireExp(){
+    game.fillText(emojis['BOMB_COLLISION'], firePos.x, firePos.y)
 }
 
 function showLives() {
@@ -279,13 +291,6 @@ function buttonLEFT() {
     startGame();
     movePlayer();
 }
-
-//TO DO:
-// ¶ winning screen with prize
-// ¶ losing screen with skeleton
-// ¶ restart function and button (setTimeout function)
-// ¶ levels+
-
 
 
 // DOCUMENTATION

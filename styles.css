@@ -18,12 +18,11 @@ body {
 
 .game-container {
     width: 100vw;
-    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 2rem;
+    gap: 1rem;
 }
 
 #game {
@@ -32,21 +31,55 @@ body {
     border-radius: 1rem;
 }
 
-.buttons {
+.buttons-section {
     display: flex;
-    flex-wrap: wrap;
+    width: 80%;
     justify-content: center;
-    width: 50%;
-    gap: 2rem;
+    align-items: center;
+    gap: 8rem;
+    flex-wrap: wrap;
+}
+
+.arrows {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    width: 25%;
+    gap: 0.4rem;
 }
 
 .bttn {
-    color: white;
-    background-color: #8EC5FC;
-    width: 6rem;
-    height: 4rem;
+    color: rgb(163, 92, 0);
+    background-color: #eeff00;
+    padding: 1.2rem;
     border-radius: 1rem;
-    border: none;
+    border: 1rem solid rgb(255, 196, 0);
+    font-weight: bold;
+}
+
+.b1 {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+}
+
+.b2 {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+}
+
+.b3 {
+    grid-column: 3 / 4;
+    grid-row: 2 / 3;
+}
+
+.b4 {
+    grid-column: 2 / 3;
+    grid-row: 3 / 4;
+}
+
+.restart-btn {
+    border-radius: 50%;
+    height: 10rem;
 }
 
 .info {

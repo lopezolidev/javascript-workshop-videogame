@@ -10,11 +10,18 @@
 <body>
     <main class="game-container">
         <canvas id="game"></canvas>
-        <section class="buttons">
-            <button class="bttn" id="up">Up</button>
-            <button class="bttn" id="left">Left</button>
-            <button class="bttn" id="right">Right</button>
-            <button class="bttn" id="down">Down</button>
+        <section class="buttons-section">
+        <div class="arrows">
+            <button class="bttn b1" id="up">⬆</button>
+            <button class="bttn b2" id="left">⬅</button>
+            <button class="bttn b3" id="right">➡</button>
+            <button class="bttn b4" id="down">⬇</button>
+        </div>
+        <div class="restart-button">
+            <button class="bttn restart-btn" id="restartBttn">
+                RESTART
+            </button>
+        </div>
         </section>
         <div class="info">
             <p>Lives: <span id="lives"></span></p>
